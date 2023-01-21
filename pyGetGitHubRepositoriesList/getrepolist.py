@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 import json
 import urllib.request
 
@@ -34,17 +36,17 @@ def get_account_type(github_account_name):
     Check if a given name is a GitHub user or org.
     :return: GitHubAccountType
     """
-    url = 'https://api.github.com/users/' + github_account_name
+    url = 'https://api.github.com/orgs/' + github_account_name
     request = urllib.request.Request(url)
     response = urllib.request.urlopen(request)
     if response.getcode() == 200:
-        return GitHubAccountType.USER
+        return GitHubAccountType.ORGANIZATION
     else:
-        url = 'https://api.github.com/orgs/' + github_account_name
+        url = 'https://api.github.com/users/' + github_account_name
         request = urllib.request.Request(url)
         response = urllib.request.urlopen(request)
         if response.getcode() == 200:
-            return GitHubAccountType.ORGANIZATION
+            return GitHubAccountType.USER
         else:
             return GitHubAccountType.NAN
 
