@@ -1,12 +1,15 @@
 #!/bin/bash
 
-echo "Info: you could find any text your may need to replace by searching '#*'."
+echo "Info: You could find any text your may need to replace by searching '#*'."
+echo "Info: Sometimes, you need press times of Ctrl+C to stop the scripts."
 
 echo "Debug: Warning that this script can't not check whether repository isn't exists!"
 echo "Debug: Warning that this script can't not escape string for JSON file!"
 #echo "Debug: Warning that this script can't queto with parameter to other program!"
 
-if [ $# -ne 1 ]; then
+auto_checkout_fetch_head = 1 #* # 0 as false, any number not 0 as true.
+
+if [[ $# != 1 ]]; then
 	echo "Error: Syntax error. Format: grmftool \"<user>/<repo_name>\""
 	exit -1
 fi
@@ -33,38 +36,48 @@ echo "Debug: cd \"$repo_dir\""
 cd "$repo_dir"
 
 if [ ! -d ".git" ]; then
-	echo "Warning: \".git\" has existed!"
-else
 	echo "Debug: git init"
 	git init
+else
+	echo "Warning: \".git\" has existed!"
 fi
 
 target_url="${git_remote_url}/${repo_dir}"
-do
+execute_result=""
+while ! [[ $execute_result == 0 ]]; do
 	echo "Debug: git fetch \"$target_url\""
-	execute_result = git fetch "$target_url"
-while [ $execute_result == 0 ];
+	git fetch "$target_url"
+	execute_result=$?
+done;
 
-#echo "Do \"git checkout FETCH_HEAD\"?[y/N] "
-#read -r -n 1 user_answer
-user_answer='Y'; echo $user_answer
-if [ $user_answer == 'Y' ] || [ $user_answer == 'y' ]; then
+
+if [[ ($auto_checkout_fetch_head == "") || ($auto_checkout_fetch_head == 0) ]]; then
+	echo "Do \"git checkout FETCH_HEAD\"?[y/N] "
+	read -r -n 1 user_answer
+else
+	user_answer='Y'
+fi
+
+if [[ ($user_answer == 'Y') || ($user_answer == 'y') ]]; then
 	echo "git checkout FETCH_HEAD"
-	execute_result = git checkout FETCH_HEAD
+	git checkout FETCH_HEAD
+	execute_result=$?
 
-	error_msg="{\"Timestamp\": \"$(date --rfc-3339=seconds)\", \"ErrorType\": \"GitCheckoutFailed\", \"Data\": {\"RepositryDirctory\": \"${git_mirror_root_dir}/${repo_dir}\"}}"
-#	sed_cmd="\$ a ${error_msg}"
-	sed_output_path="${begin_path}/grmftool.log"
-#	if [ ! -f "$sed_output_path" ]; then
-#		echo "Debug: touch \"$sed_output_path\""
-#		touch "$sed_output_path"
-#	fi
-#	echo "Debug: sed \"$sed_cmd\" \"$sed_output_path\""
-#	sed "$sed_cmd" "$sed_output_path"
-	echo "Debug: echo \"$error_msg\" >> \"$sed_output_path\""
-	echo "$error_msg" >> "$sed_output_path"
+	if [[ $execute_result != 0 ]]; then
+		error_msg="{\"Timestamp\": \"$(date --rfc-3339=seconds)\", \"ErrorType\": \"GitCheckoutFailed\", \"Data\": {\"RepositryDirctory\": \"${git_mirror_root_dir}/${repo_dir}\"}}"
+	#	sed_cmd="\$ a ${error_msg}"
+		sed_output_path="${begin_path}/grmftool.log"
+	#	if [ ! -f "$sed_output_path" ]; then
+	#		echo "Debug: touch \"$sed_output_path\""
+	#		touch "$sed_output_path"
+	#	fi
+	#	echo "Debug: sed \"$sed_cmd\" \"$sed_output_path\""
+	#	sed "$sed_cmd" "$sed_output_path"
+		echo "Debug: echo \"$error_msg\" >> \"$sed_output_path\""
+		echo "$error_msg" >> "$sed_output_path"
 
-	exit -1
+		exit -1
+	fi
 fi
 
 exit 0
