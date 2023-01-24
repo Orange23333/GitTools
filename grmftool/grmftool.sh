@@ -7,7 +7,7 @@ echo "Debug: Warning that this script can't not check whether repository isn't e
 echo "Debug: Warning that this script can't not escape string for JSON file!"
 #echo "Debug: Warning that this script can't queto with parameter to other program!"
 
-auto_checkout_fetch_head = 1 #* # 0 as false, any number not 0 as true.
+auto_checkout_fetch_head=1 #* # 0 as false, any number not 0 as true.
 
 if [[ $# != 1 ]]; then
 	echo "Error: Syntax error. Format: grmftool \"<user>/<repo_name>\""
