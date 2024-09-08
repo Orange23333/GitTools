@@ -6,6 +6,9 @@ echo "Info: Sometimes, you need press times of Ctrl+C to stop the scripts."
 echo "Debug: Warning that this script can't not check whether repository isn't exists!"
 echo "Debug: Warning that this script can't not escape string for JSON file!"
 #echo "Debug: Warning that this script can't queto with parameter to other program!"
+echo "Debug: The program can't detect empty (which no HEAD ref) and nonexistent (which URL may wrong) repository."
+
+echo "Debug: 代办： 增加可选checkout，因为checkout占用存储空间和时间"
 
 auto_checkout_fetch_head=1 #* # 0 as false, any number not 0 as true.
 

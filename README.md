@@ -21,8 +21,8 @@ Looking up `#*` in the script to find variables modifiable variable.
 
 It's a `Python` package and saved in `pyGetGitHubRepositoriesList` directory.
 
-it is preview version now.
+It is a preview version now.
 
 And it is written with `GitHub Copilot` before. So, it with a lot of descriptive comments, and different language styles.
-I'm tring to publish a new license for code written with `GitHub Copilot` or other `AI` code named `Work with GitHub Copilot License`(`WGHCL`) for those code.
-And I'll modify these blobs later.
+I'm tring to publish a new license for code written with `GitHub Copilot` and other `AI` named `Work with GitHub Copilot License`(`WGHCL`).
+And I'll modify these code later.
